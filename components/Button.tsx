@@ -15,7 +15,7 @@ const ButtonWrapper = styled.footer`
   width: 100%;
   padding: 0 16px;
   left: 0;
-  bottom: 24px;
+  bottom: 16px;
 `;
 const But = styled.button`
   width: 100%;

@@ -4,13 +4,15 @@ import { DefaultTheme } from "styled-components";
 import List from "../components/List";
 const Home = () => {
   return (
-    <HomeWrapper>
+    <>
       <Head>
         <title>키다리스튜디오 과제전형</title>
       </Head>
-      <HomeText>등록된 주소 목록</HomeText>
-      <List />
-    </HomeWrapper>
+      <HomeWrapper>
+        <HomeText>등록된 주소 목록</HomeText>
+        <List />
+      </HomeWrapper>
+    </>
   );
 };
 
