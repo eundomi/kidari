@@ -25,7 +25,6 @@ const Button = () => {
       id: nextId,
       zonecode: zoneCode,
       address: address,
-      isDeleted: false,
     };
 
     setContents([...contents, content]);
@@ -33,14 +32,6 @@ const Button = () => {
     setZonecode("");
   }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
 
-  //todo input text
-  const onChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>): void => {
-      setAddress(e.target.value);
-      setZonecode(e.target.value);
-    },
-    [setAddress, setZonecode]
-  );
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -65,7 +56,6 @@ const Button = () => {
       id: nextId,
       zonecode: data.zonecode,
       address: data.address,
-      isDeleted: false,
     };
 
     setContents([...contents, content]);

@@ -4,7 +4,6 @@ export interface IAddressTypes {
   id: number;
   zonecode: string;
   address: string;
-  isDeleted: boolean;
 }
 
 export const addressState = atom<string>({
@@ -25,14 +24,12 @@ export const contentsState = atom<IAddressTypes[]>({
       id: 1,
       zonecode: "13357",
       address: "경기 성남시 중원구 산성대로 198",
-      isDeleted: false,
     },
 
     {
       id: 2,
       zonecode: "39325",
       address: "경북 구미시 박정희로 236-8",
-      isDeleted: false,
     },
   ],
 });

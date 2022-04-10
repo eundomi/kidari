@@ -21,7 +21,6 @@ export default function List({}) {
     id: nextId,
     zonecode: zoneCode,
     address: address,
-    isDeleted: false,
   };
   console.log(contents);
 
@@ -36,9 +35,9 @@ export default function List({}) {
   return (
     <>
       {contents.map((content: IAddressTypes) => {
-        const { id, zonecode, address, isDeleted } = content;
+        const { id, zonecode, address } = content;
         return (
-          <ListWrapper key={id} id={id} isDeleted={isDeleted}>
+          <ListWrapper key={id} id={id} >
             <Text>
               <Input id="postcode">{zonecode}</Input>
               <Input id="address">{address}</Input>

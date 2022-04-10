@@ -7,7 +7,6 @@ const Home = () => {
     <>
       <Head>
         <title>키다리스튜디오 과제전형</title>
-        {/* <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script> */}
       </Head>
       <HomeWrapper>
         <HomeText>등록된 주소 목록</HomeText>
