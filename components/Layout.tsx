@@ -2,12 +2,14 @@ import React from "react";
 import Header from "./Header";
 import Button from "../components/Button";
 import styled from "styled-components";
+import Postcode from "./Postcode";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <LayoutWrapper>
       <Header />
       <Child>{children}</Child>
+      {/* <Postcode /> */}
       <Button />
     </LayoutWrapper>
   );

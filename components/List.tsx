@@ -1,88 +1,52 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { SetterOrUpdater } from "recoil";
+import { useCallback } from "react";
 import styled from "styled-components";
-import Swal from "sweetalert2";
+import { useRecoilState } from "recoil";
+import {
+  addressState,
+  zoneCodesState,
+  contentsState,
+  IAddressTypes,
+} from "../recoil/states";
 
-export default function List() {
+export default function List({}) {
+  const [address, setAddress] = useRecoilState(addressState);
+  const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
+  const [contents, setContents] =
+    useRecoilState<IAddressTypes[]>(contentsState);
+  const nextId = contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
+  const content: IAddressTypes = {
+    id: nextId,
+    zonecode: zoneCode,
+    address: address,
+    isDeleted: false,
+  };
+  console.log(contents);
+
+  const deleteContent = useCallback(
+    (id: number) => {
+      setContents(
+        contents.filter((contents: IAddressTypes) => contents.id !== id)
+      );
+    },
+    [setContents, contents]
+  );
   return (
     <>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
-      <ListWrapper>
-        <Text>
-          <Input id="postcode">13357</Input>
-          <Input id="address">경기 성남시 중원구 산성대로 198</Input>
-        </Text>
-        <Delete src="/Delete.svg" />
-      </ListWrapper>
+      {contents.map((content: IAddressTypes) => {
+        const { id, zonecode, address, isDeleted } = content;
+        return (
+          <ListWrapper key={id} id={id} isDeleted={isDeleted}>
+            <Text>
+              <Input id="postcode">{zonecode}</Input>
+              <Input id="address">{address}</Input>
+            </Text>
+            <Delete src="/Delete.svg" onClick={() => deleteContent(id)} />
+          </ListWrapper>
+        );
+      })}
     </>
   );
 }
