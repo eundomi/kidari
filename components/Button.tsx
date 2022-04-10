@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { useState, useCallback, ChangeEvent } from "react";
 import { Modal } from "antd";
 import DaumPostCode from "react-daum-postcode";
@@ -47,7 +48,6 @@ const Button = () => {
   const onCompleteDaumPostCode = async (data: any) => {
     setAddress(data.address);
     setZonecode(data.zonecode);
-    console.log(data);
     setIsModalVisible(false);
 
     const nextId =
@@ -59,13 +59,17 @@ const Button = () => {
     };
 
     setContents([...contents, content]);
-
-    console.log(data);
   };
 
   return (
     <>
-      <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+      <Script
+        type="text/javascript"
+        src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+      ></Script>
+      <ButtonWrapper>
+        <But onClick={showModal}>우편번호 검색</But>
+      </ButtonWrapper>
       {isModalVisible && (
         <Modal
           title="주소 검색하기"
@@ -76,9 +80,6 @@ const Button = () => {
           <DaumPostCode onComplete={onCompleteDaumPostCode} />
         </Modal>
       )}
-      <ButtonWrapper>
-        <But onClick={showModal}>우편번호 검색</But>
-      </ButtonWrapper>
     </>
   );
 };
