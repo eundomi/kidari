@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SetterOrUpdater } from "recoil";
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import {
@@ -10,8 +10,10 @@ import {
   contentsState,
   IAddressTypes,
 } from "../recoil/states";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export default function List({}) {
+  const [winReady, setwinReady] = useState(false);
   const [address, setAddress] = useRecoilState(addressState);
   const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
   const [contents, setContents] =
@@ -32,24 +34,51 @@ export default function List({}) {
     },
     [setContents, contents]
   );
+
+  useEffect(() => {
+    setwinReady(true);
+  }, []);
   return (
-    <>
-      {contents.map((content: IAddressTypes) => {
-        const { id, zonecode, address } = content;
-        return (
-          <ListWrapper key={id} id={id} >
-            <Text>
-              <Input id="postcode">{zonecode}</Input>
-              <Input id="address">{address}</Input>
-            </Text>
-            <Delete src="/Delete.svg" onClick={() => deleteContent(id)} />
-          </ListWrapper>
-        );
-      })}
-    </>
+    <DragDropContext>
+      {winReady && (
+        <Droppable droppableId="contents">
+          {(provided) => (
+            <div
+              className="List"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {contents.map((content: IAddressTypes, index) => {
+                const { id, zonecode, address } = content;
+                return (
+                  <Draggable key={id} draggableId={id} index={index}>
+                    {(provided) => (
+                      <ListWrapper
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <Text>
+                          <Input id="postcode">{zonecode}</Input>
+                          <Input id="address">{address}</Input>
+                        </Text>
+                        <Delete
+                          src="/Delete.svg"
+                          onClick={() => deleteContent(id)}
+                        />
+                      </ListWrapper>
+                    )}
+                  </Draggable>
+                );
+              })}
+            </div>
+          )}
+        </Droppable>
+      )}
+    </DragDropContext>
   );
 }
-const ListWrapper = styled.div`
+const ListWrapper = styled.li`
   display: flex;
   justify-content: space-between;
   width: 100%;
