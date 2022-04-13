@@ -35,11 +35,19 @@ export default function List({}) {
     [setContents, contents]
   );
 
+  function handleOnDragEnd(result) {
+    if (!result.destination) return;
+    const items = Array.from(contents);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setContents(items);
+  }
   useEffect(() => {
     setwinReady(true);
   }, []);
   return (
-    <DragDropContext>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
       {winReady && (
         <Droppable droppableId="contents">
           {(provided) => (
@@ -48,10 +56,10 @@ export default function List({}) {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {contents.map((content: IAddressTypes, index) => {
-                const { id, zonecode, address } = content;
+              {contents.map(({ id, zonecode, address }, index) => {
+                // const { id, zonecode, address } = content;
                 return (
-                  <Draggable key={id} draggableId={id} index={index}>
+                  <Draggable key={id} draggableId={zonecode} index={index}>
                     {(provided) => (
                       <ListWrapper
                         ref={provided.innerRef}
@@ -71,6 +79,7 @@ export default function List({}) {
                   </Draggable>
                 );
               })}
+              {provided.placeholder}
             </div>
           )}
         </Droppable>
@@ -78,7 +87,7 @@ export default function List({}) {
     </DragDropContext>
   );
 }
-const ListWrapper = styled.li`
+const ListWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
