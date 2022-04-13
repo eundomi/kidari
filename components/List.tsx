@@ -24,7 +24,6 @@ export default function List({}) {
     zonecode: zoneCode,
     address: address,
   };
-  console.log(contents);
 
   const deleteContent = useCallback(
     (id: number) => {
@@ -57,7 +56,6 @@ export default function List({}) {
               ref={provided.innerRef}
             >
               {contents.map(({ id, zonecode, address }, index) => {
-                // const { id, zonecode, address } = content;
                 return (
                   <Draggable key={id} draggableId={zonecode} index={index}>
                     {(provided) => (
