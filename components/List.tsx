@@ -99,14 +99,14 @@ const ListWrapper = styled.div`
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 16px;
-  /* img {
+  img {
     display: none;
   }
   :hover {
     img {
       display: block;
     }
-  } */
+  }
 `;
 const Text = styled.div`
   display: flex;
