@@ -11,8 +11,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>키다리스튜디오 과제전형</title>
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
       </Head>
+        <script
+            src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+            strategy="lazyOnload"
+            onLoad={() =>
+                console.log(`script loaded correctly, window.FB has been populated`)
+            }
+        />
       <RecoilRoot>
         <ThemeProvider theme={theme}>
           <Layout>

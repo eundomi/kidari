@@ -8,10 +8,13 @@ import {
   addressState,
   zoneCodesState,
   contentsState,
+  isModalVisible,
   IAddressTypes,
 } from "../recoil/states";
+
+
 const Button = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useRecoilState(isModalVisible);
 
   const [address, setAddress] = useRecoilState(addressState);
   const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
@@ -34,21 +37,21 @@ const Button = () => {
   }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setModalVisible(true);
   };
 
   const handleOk = () => {
-    setIsModalVisible(true);
+    setModalVisible(true);
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setModalVisible(false);
   };
 
   const onCompleteDaumPostCode = async (data: any) => {
     setAddress(data.address);
     setZonecode(data.zonecode);
-    setIsModalVisible(false);
+    setModalVisible(false);
 
     const nextId =
       contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
@@ -63,20 +66,17 @@ const Button = () => {
 
   return (
     <>
-      <Script
-        type="text/javascript"
-        src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-      ></Script>
       <ButtonWrapper>
         <But onClick={showModal}>우편번호 검색</But>
       </ButtonWrapper>
-      {isModalVisible && (
+      {modalVisible && (
         <Modal
           title="주소 검색하기"
           visible={true}
           onOk={handleOk}
           onCancel={handleCancel}
         >
+
           <DaumPostCode onComplete={onCompleteDaumPostCode} />
         </Modal>
       )}

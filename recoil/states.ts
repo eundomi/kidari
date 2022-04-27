@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import {useState} from "react";
 
 export interface IAddressTypes {
   id: number;
@@ -6,6 +7,10 @@ export interface IAddressTypes {
   address: string;
 }
 
+export const isModalVisible=atom<boolean>({
+  key:"isModalVisible",
+  default:false,
+})
 export const addressState = atom<string>({
   key: "addressState",
   default: "",

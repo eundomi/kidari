@@ -65,8 +65,8 @@ export default function List({}) {
                         {...provided.dragHandleProps}
                       >
                         <Text>
-                          <Input id="postcode">{zonecode}</Input>
-                          <Input id="address">{address}</Input>
+                          <Input>{zonecode}</Input>
+                          <Input>{address}</Input>
                         </Text>
                         <Img>
                           <Edit
