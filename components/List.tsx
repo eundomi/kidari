@@ -68,10 +68,15 @@ export default function List({}) {
                           <Input id="postcode">{zonecode}</Input>
                           <Input id="address">{address}</Input>
                         </Text>
-                        <Delete
-                          src="/Delete.svg"
-                          onClick={() => deleteContent(id)}
-                        />
+                        <Img>
+                          <Edit
+                              src="/Edit.svg"/>
+                          <Delete
+                              src="/Delete.svg"
+                              onClick={() => deleteContent(id)}
+                          />
+                        </Img>
+
                       </ListWrapper>
                     )}
                   </Draggable>
@@ -89,7 +94,7 @@ const ListWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 100px;
+  min-height: 100px;
   border-radius: 8px;
   background-color: #fdfdfd;
   border: none;
@@ -97,12 +102,14 @@ const ListWrapper = styled.div`
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 16px;
+  overflow:visible ;
   img {
     display: none;
   }
   :hover {
     img {
       display: block;
+      
     }
   }
 `;
@@ -110,7 +117,6 @@ const Text = styled.div`
   display: flex;
   flex-direction: column;
     justify-content: space-around;
-}
 `;
 const Input = styled.span`
   background-color: #fdfdfd;
@@ -118,8 +124,14 @@ const Input = styled.span`
   color: #72757e;
   font-weight: 400;
   font-size: 14px;
-  overflow: hidden;
+  overflow:visible ;
   height: auto;
+`;
+const Edit = styled.img`
+  width: 24px;
+  :hover {
+    cursor: pointer;
+  }
 `;
 const Delete = styled.img`
   width: 24px;
@@ -127,3 +139,6 @@ const Delete = styled.img`
     cursor: pointer;
   }
 `;
+const Img=styled.div`
+  display: flex;
+width:50px;`
