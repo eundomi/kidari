@@ -6,7 +6,7 @@ const Home = () => {
   return (
     <>
       <Head>
-        <title>키다리스튜디오 과제전형</title>
+        <title>주소 등록 및 삭제</title>
       </Head>
       <HomeWrapper>
         <HomeText>등록된 주소 목록</HomeText>

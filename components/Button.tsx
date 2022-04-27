@@ -67,7 +67,7 @@ const Button = () => {
   return (
     <>
       <ButtonWrapper>
-        <But onClick={showModal}>우편번호 검색</But>
+        <But onClick={showModal}>주소 검색</But>
       </ButtonWrapper>
       {modalVisible && (
         <Modal
