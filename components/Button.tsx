@@ -1,87 +1,91 @@
 import Script from "next/script";
-import { useState, useCallback, ChangeEvent } from "react";
-import { Modal } from "antd";
+import {useState, useCallback, ChangeEvent} from "react";
+import {Modal} from "antd";
 import DaumPostCode from "react-daum-postcode";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import {useRecoilState} from "recoil";
 import {
-  addressState,
-  zoneCodesState,
-  contentsState,
-  isModalVisible,
-  IAddressTypes,
+    addressState,
+    zoneCodesState,
+    contentsState,
+    isModalVisible,
+    IAddressTypes, nameState,
 } from "../recoil/states";
 
 
 const Button = () => {
-  const [modalVisible, setModalVisible] = useRecoilState(isModalVisible);
+    const [modalVisible, setModalVisible] = useRecoilState(isModalVisible);
+    const [name, setName] = useRecoilState(nameState);
+    const [address, setAddress] = useRecoilState(addressState);
+    const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
+    const [contents, setContents] =
+        useRecoilState<IAddressTypes[]>(contentsState);
 
-  const [address, setAddress] = useRecoilState(addressState);
-  const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
-  const [contents, setContents] =
-    useRecoilState<IAddressTypes[]>(contentsState);
+    //address 추가하기
+    const addAddress = useCallback((): void => {
+        const nextId =
+            contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
+        const content: IAddressTypes = {
+            id: nextId,
+            name: name,
+            zonecode: zoneCode,
+            address: address,
+        };
 
-  //address 추가하기
-  const addAddress = useCallback((): void => {
-    const nextId =
-      contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
-    const content: IAddressTypes = {
-      id: nextId,
-      zonecode: zoneCode,
-      address: address,
+        setContents([...contents, content]);
+        setAddress("");
+        setZonecode("");
+    }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
+
+    const showModal = () => {
+        setModalVisible(true);
+
     };
 
-    setContents([...contents, content]);
-    setAddress("");
-    setZonecode("");
-  }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
-
-  const showModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setModalVisible(false);
-  };
-
-  const onCompleteDaumPostCode = async (data: any) => {
-    setAddress(data.address);
-    setZonecode(data.zonecode);
-    setModalVisible(false);
-
-    const nextId =
-      contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
-    const content: IAddressTypes = {
-      id: nextId,
-      zonecode: data.zonecode,
-      address: data.address,
+    const handleOk = () => {
+        setModalVisible(true);
     };
 
-    setContents([...contents, content]);
-  };
+    const handleCancel = () => {
+        setModalVisible(false);
+    };
 
-  return (
-    <>
-      <ButtonWrapper>
-        <But onClick={showModal}>주소 검색</But>
-      </ButtonWrapper>
-      {modalVisible && (
-        <Modal
-          title="주소 검색하기"
-          visible={true}
-          onOk={handleOk}
-          onCancel={handleCancel}
-        >
+    const onCompleteDaumPostCode = async (data: any) => {
+        setAddress(data.address);
+        setZonecode(data.zonecode);
+        setModalVisible(false);
+        setName("");
+        const nextId =
+            contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
+        const content: IAddressTypes = {
+            id: nextId,
+            name: name,
+            zonecode: data.zonecode,
+            address: data.address,
+        };
 
-          <DaumPostCode onComplete={onCompleteDaumPostCode} />
-        </Modal>
-      )}
-    </>
-  );
+        setContents([...contents, content]);
+    };
+
+    return (
+        <>
+            <ButtonWrapper>
+                <But onClick={showModal}>주소 검색</But>
+            </ButtonWrapper>
+            {name && modalVisible && (
+                <Modal
+                    title="주소 검색하기"
+                    visible={true}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                >
+                    <DaumPostCode onComplete={onCompleteDaumPostCode}/>
+                </Modal>
+
+            )}
+
+        </>
+    );
 };
 export default Button;
 const ButtonWrapper = styled.div`

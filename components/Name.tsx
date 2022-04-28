@@ -1,9 +1,13 @@
 import styled from "styled-components"
+import {useRecoilState} from "recoil";
+import {nameState} from "../recoil/states";
 
 const Name = () => {
+    const [name,setName]=useRecoilState(nameState);
     return (
         <InputWrapper>
-            <Input />
+            <Input value={name}
+                   onChange={e => setName(e.target.value)}/>
         </InputWrapper>
 
     );

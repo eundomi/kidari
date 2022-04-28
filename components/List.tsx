@@ -8,12 +8,14 @@ import {
   addressState,
   zoneCodesState,
   contentsState,
+  nameState,
   IAddressTypes,
 } from "../recoil/states";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export default function List({}) {
   const [winReady, setwinReady] = useState(false);
+  const [name,setName]=useRecoilState(nameState);
   const [address, setAddress] = useRecoilState(addressState);
   const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
   const [contents, setContents] =
@@ -21,6 +23,7 @@ export default function List({}) {
   const nextId = contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
   const content: IAddressTypes = {
     id: nextId,
+    name:name,
     zonecode: zoneCode,
     address: address,
   };
@@ -34,7 +37,7 @@ export default function List({}) {
     [setContents, contents]
   );
 
-  function handleOnDragEnd(result) {
+  function handleOnDragEnd(result:any) {
     if (!result.destination) return;
     const items = Array.from(contents);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -55,7 +58,7 @@ export default function List({}) {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {contents.map(({ id, zonecode, address }, index) => {
+              {contents.map(({ id,name, zonecode, address }, index) => {
                 return (
                   <Draggable key={id} draggableId={zonecode} index={index}>
                     {(provided) => (
@@ -65,6 +68,7 @@ export default function List({}) {
                         {...provided.dragHandleProps}
                       >
                         <Text>
+                          <Input>{name}</Input>
                           <Input>{zonecode}</Input>
                           <Input>{address}</Input>
                         </Text>
@@ -94,7 +98,7 @@ const ListWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  min-height: 100px;
+  min-height: 120px;
   border-radius: 8px;
   background-color: #fdfdfd;
   border: none;
