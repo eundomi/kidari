@@ -48,6 +48,7 @@ export default function List({}) {
   useEffect(() => {
     setwinReady(true);
   }, []);
+ console.log(contents)
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       {winReady && (
@@ -69,8 +70,7 @@ export default function List({}) {
                       >
                         <Text>
                           <Input>{name}</Input>
-                          <Input>{zonecode}</Input>
-                          <Input>{address}</Input>
+                          <Input>{zonecode}<br/>{address}</Input>
                         </Text>
                         <Img>
                           <Edit
@@ -145,4 +145,5 @@ const Delete = styled.img`
 `;
 const Img=styled.div`
   display: flex;
-width:50px;`
+width:55px;
+  justify-content: space-between;`
