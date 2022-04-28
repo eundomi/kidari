@@ -2,16 +2,22 @@ import React from "react";
 import Header from "./Header";
 import Button from "../components/Button";
 import styled from "styled-components";
+import Name from "./Name";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <LayoutWrapper>
-      <Header />
-      <Child>{children}</Child>
-      {/* <Postcode /> */}
-      <Button />
-    </LayoutWrapper>
-  );
+export default function Layout({children}: { children: React.ReactNode }) {
+    return (
+        <LayoutWrapper>
+            <Header/>
+            <Child>{children}
+                <Wrapper>
+                    <Name/>
+                    <Button/>
+                </Wrapper>
+
+            </Child>
+
+        </LayoutWrapper>
+    );
 }
 
 const LayoutWrapper = styled.div`
@@ -29,3 +35,8 @@ const Child = styled.div`
   margin-bottom: 72px;
   overflow: auto;
 `;
+const Wrapper = styled.div`position: absolute;
+  width: 100%;
+  padding: 0 16px;
+  right: 0;
+  bottom: 16px;`

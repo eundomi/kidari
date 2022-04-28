@@ -84,22 +84,23 @@ const Button = () => {
   );
 };
 export default Button;
-const ButtonWrapper = styled.footer`
+const ButtonWrapper = styled.div`
+
   position: absolute;
-  width: 100%;
+  width: 40%;
   padding: 0 16px;
-  left: 0;
-  bottom: 16px;
+  right: 0;
+  bottom: 2px;
 `;
 const But = styled.button`
   width: 100%;
   height: 56px;
   background-color: #fe2bb2;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
-  border-radius: 8px;
-  border: 0;
+  border-radius: 40px;
+  border: #FF2C75;
   cursor: pointer;
 
   :hover {
