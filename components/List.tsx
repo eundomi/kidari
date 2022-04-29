@@ -9,10 +9,11 @@ import {
   IAddressTypes,
 } from "../recoil/states";
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import DaumPostCode from "react-daum-postcode";
 
 export default function List({}) {
   const [winReady, setwinReady] = useState(false);
-  const [name,setName]=useRecoilState(nameState);
+  const [name, setName] = useRecoilState(nameState);
   const [address, setAddress] = useRecoilState(addressState);
   const [zoneCode, setZonecode] = useRecoilState(zoneCodesState);
   const [contents, setContents] =
@@ -24,7 +25,6 @@ export default function List({}) {
     zonecode: zoneCode,
     address: address,
   };
-
 
 
   function handleOnDragEnd(result: any) {
@@ -39,12 +39,16 @@ export default function List({}) {
   useEffect(() => {
     setwinReady(true);
   }, []);
-  console.log(contents)
 
 
   // @ts-ignore
   const ListItem = ({id, name, zonecode, address}, index) => {
     const [editMode, setEditMode] = useState(false);
+    const [newName, setNewName] = useState(name);
+
+    const changeToEditMode = () => {
+      setEditMode(false);
+    };
 
     const deleteContent = useCallback(
       (id: number) => {
@@ -56,25 +60,45 @@ export default function List({}) {
       [setContents, contents]
     );
 
-    const EditContent = (id: number) => {
+    const editContent = () => {
       setEditMode(!editMode);
-      console.log(editMode);
-      console.log(id);
     }
+
+    const completeContent = () => {
+
+
+      console.log(newName)
+
+
+      changeToEditMode();
+      console.log("id", id)
+      console.log("newName", newName)
+      console.log("contents", contents)
+
+      const copyContents = [...contents]
+      //수정완료는 복사한 배열을 통해 재렌더링해서 구현할 예정입니다.
+
+    }
+
     return (
       <>
-        <Text>
-          {editMode ? <input value={name} placeholder="이름" /> : (<Input>{name}</Input>)}
-          <Input>{zonecode}<br/>{address}</Input>
-        </Text>
+        <Item>
+          {editMode ? (<><input placeholder="이름" value={newName} onChange={(e) => setNewName(e.target.value)}/></>) :
+            (<>
+              <Text>{name}</Text><Address>
+              <Text>{zonecode}<br/>{address}</Text>
+            </Address>
+            </>)}
+
+        </Item>
         <Img>
-          {editMode?(<Edit
+          {editMode ? (<Edit
             src="/Check.svg"
-            onClick={() => EditContent(id)}
-          />):(<Edit
+            onClick={completeContent}
+          />) : (<Edit
             src="/Edit.svg"
-            onClick={() => EditContent(id)}
-            />)}
+            onClick={editContent}
+          />)}
           <Delete
             src="/Delete.svg"
             onClick={() => deleteContent(id)}
@@ -109,7 +133,7 @@ export default function List({}) {
                                   name={name}
                                   address={address}
                                   zonecode={zonecode}
-                                  ></ListItem>
+                        ></ListItem>
 
                       </ListWrapper>
                     )}
@@ -147,7 +171,7 @@ const ListWrapper = styled.div`
   //  }
   //}
 `;
-const Text = styled.div`
+const Item = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -179,3 +203,11 @@ const Img = styled.div`
   display: flex;
   width: 55px;
   justify-content: space-between;`
+const Address = styled.div`
+`
+const Text = styled.span`
+  color: #72757e;
+  font-weight: 400;
+  font-size: 14px;
+  overflow: visible;
+  height: auto;`
