@@ -11,7 +11,7 @@ import {
     isModalVisible,
     IAddressTypes, nameState,
 } from "../recoil/states";
-
+import swal from "sweetalert"
 
 const Button = () => {
     const [modalVisible, setModalVisible] = useRecoilState(isModalVisible);
@@ -38,8 +38,8 @@ const Button = () => {
     }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
 
     const showModal = () => {
+        if(name.trim().length == 0) return swal("이름을 입력해주세요.");
         setModalVisible(true);
-
     };
 
     const handleOk = () => {
@@ -72,7 +72,7 @@ const Button = () => {
             <ButtonWrapper>
                 <But onClick={showModal}>주소 검색</But>
             </ButtonWrapper>
-            {name && modalVisible && (
+            {modalVisible && (
                 <Modal
                     title="주소 검색하기"
                     visible={true}

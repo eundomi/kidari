@@ -20,7 +20,8 @@
     "react-dom": "18.0.0",
     "recoil": "^0.7.0",
     "styled-components": "^5.3.5",
-    "styled-normalize": "^8.0.7"
+    "styled-normalize": "^8.0.7",
+    "sweetalert": "^2.1.2"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
