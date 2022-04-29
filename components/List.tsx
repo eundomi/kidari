@@ -1,9 +1,6 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { SetterOrUpdater } from "recoil";
-import { useCallback, useState, useEffect } from "react";
+import {useCallback, useState, useEffect} from "react";
 import styled from "styled-components";
-import { useRecoilState } from "recoil";
+import {useRecoilState} from "recoil";
 import {
   addressState,
   zoneCodesState,
@@ -11,7 +8,7 @@ import {
   nameState,
   IAddressTypes,
 } from "../recoil/states";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 
 export default function List({}) {
   const [winReady, setwinReady] = useState(false);
@@ -23,21 +20,14 @@ export default function List({}) {
   const nextId = contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
   const content: IAddressTypes = {
     id: nextId,
-    name:name,
+    name: name,
     zonecode: zoneCode,
     address: address,
   };
 
-  const deleteContent = useCallback(
-    (id: number) => {
-      setContents(
-        contents.filter((contents: IAddressTypes) => contents.id !== id)
-      );
-    },
-    [setContents, contents]
-  );
 
-  function handleOnDragEnd(result:any) {
+
+  function handleOnDragEnd(result: any) {
     if (!result.destination) return;
     const items = Array.from(contents);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -45,10 +35,56 @@ export default function List({}) {
 
     setContents(items);
   }
+
   useEffect(() => {
     setwinReady(true);
   }, []);
- console.log(contents)
+  console.log(contents)
+
+
+  // @ts-ignore
+  const ListItem = ({id, name, zonecode, address}, index) => {
+    const [editMode, setEditMode] = useState(false);
+
+    const deleteContent = useCallback(
+      (id: number) => {
+        setContents(
+          contents.filter((contents: IAddressTypes) => contents.id !== id)
+        );
+        console.log(id)
+      },
+      [setContents, contents]
+    );
+
+    const EditContent = (id: number) => {
+      setEditMode(!editMode);
+      console.log(editMode);
+      console.log(id);
+    }
+    return (
+      <>
+        <Text>
+          {editMode ? <input value={name} placeholder="이름" /> : (<Input>{name}</Input>)}
+          <Input>{zonecode}<br/>{address}</Input>
+        </Text>
+        <Img>
+          {editMode?(<Edit
+            src="/Check.svg"
+            onClick={() => EditContent(id)}
+          />):(<Edit
+            src="/Edit.svg"
+            onClick={() => EditContent(id)}
+            />)}
+          <Delete
+            src="/Delete.svg"
+            onClick={() => deleteContent(id)}
+          />
+        </Img>
+      </>
+    );
+  };
+
+
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
       {winReady && (
@@ -59,7 +95,7 @@ export default function List({}) {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {contents.map(({ id,name, zonecode, address }, index) => {
+              {contents.map(({id, name, zonecode, address}, index) => {
                 return (
                   <Draggable key={id} draggableId={zonecode} index={index}>
                     {(provided) => (
@@ -68,18 +104,12 @@ export default function List({}) {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <Text>
-                          <Input>{name}</Input>
-                          <Input>{zonecode}<br/>{address}</Input>
-                        </Text>
-                        <Img>
-                          <Edit
-                              src="/Edit.svg"/>
-                          <Delete
-                              src="/Delete.svg"
-                              onClick={() => deleteContent(id)}
-                          />
-                        </Img>
+                        <ListItem key={index}
+                                  id={id}
+                                  name={name}
+                                  address={address}
+                                  zonecode={zonecode}
+                                  ></ListItem>
 
                       </ListWrapper>
                     )}
@@ -106,21 +136,21 @@ const ListWrapper = styled.div`
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 16px;
-  overflow:visible ;
-  img {
-    display: none;
-  }
-  :hover {
-    img {
-      display: block;
-      
-    }
-  }
+  overflow: visible;
+  //img {
+  //  display: none;
+  //}
+  //:hover {
+  //  img {
+  //    display: block;
+  //    
+  //  }
+  //}
 `;
 const Text = styled.div`
   display: flex;
   flex-direction: column;
-    justify-content: space-around;
+  justify-content: space-around;
 `;
 const Input = styled.span`
   background-color: #fdfdfd;
@@ -128,22 +158,24 @@ const Input = styled.span`
   color: #72757e;
   font-weight: 400;
   font-size: 14px;
-  overflow:visible ;
+  overflow: visible;
   height: auto;
 `;
 const Edit = styled.img`
   width: 24px;
+
   :hover {
     cursor: pointer;
   }
 `;
 const Delete = styled.img`
   width: 24px;
+
   :hover {
     cursor: pointer;
   }
 `;
-const Img=styled.div`
+const Img = styled.div`
   display: flex;
-width:55px;
+  width: 55px;
   justify-content: space-between;`

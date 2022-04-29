@@ -21,25 +21,10 @@ const Button = () => {
     const [contents, setContents] =
         useRecoilState<IAddressTypes[]>(contentsState);
 
-    //address 추가하기
-    const addAddress = useCallback((): void => {
-        const nextId =
-            contents.length > 0 ? contents[contents.length - 1].id + 1 : 0;
-        const content: IAddressTypes = {
-            id: nextId,
-            name: name,
-            zonecode: zoneCode,
-            address: address,
-        };
-
-        setContents([...contents, content]);
-        setAddress("");
-        setZonecode("");
-    }, [address, setAddress, zoneCode, setZonecode, contents, setContents]);
-
     const showModal = () => {
         if(name.trim().length == 0) return swal("이름을 입력해주세요.");
         setModalVisible(true);
+        console.log(contents)
     };
 
     const handleOk = () => {
@@ -63,7 +48,6 @@ const Button = () => {
             zonecode: data.zonecode,
             address: data.address,
         };
-
         setContents([...contents, content]);
     };
 
