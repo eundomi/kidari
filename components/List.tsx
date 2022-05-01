@@ -1,6 +1,6 @@
-import {useCallback, useState, useEffect} from "react";
+import { useCallback, useState, useEffect } from "react";
 import styled from "styled-components";
-import {useRecoilState} from "recoil";
+import { useRecoilState } from "recoil";
 import {
   addressState,
   zoneCodesState,
@@ -8,7 +8,7 @@ import {
   nameState,
   IAddressTypes,
 } from "../recoil/states";
-import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DaumPostCode from "react-daum-postcode";
 
 export default function List({}) {
@@ -26,7 +26,6 @@ export default function List({}) {
     address: address,
   };
 
-
   function handleOnDragEnd(result: any) {
     if (!result.destination) return;
     const items = Array.from(contents);
@@ -40,9 +39,8 @@ export default function List({}) {
     setwinReady(true);
   }, []);
 
-
   // @ts-ignore
-  const ListItem = ({id, name, zonecode, address}, index) => {
+  const ListItem = ({ id, name, zonecode, address }, index) => {
     const [editMode, setEditMode] = useState(false);
     const [newName, setNewName] = useState(name);
 
@@ -55,59 +53,70 @@ export default function List({}) {
         setContents(
           contents.filter((contents: IAddressTypes) => contents.id !== id)
         );
-        console.log(id)
+        console.log(id);
       },
       [setContents, contents]
     );
 
     const editContent = () => {
       setEditMode(!editMode);
-    }
+    };
 
     const completeContent = () => {
-
-
-      console.log(newName)
-
-
       changeToEditMode();
-      console.log("id", id)
-      console.log("newName", newName)
-      console.log("contents", contents)
 
-      const copyContents = [...contents]
+      const newContents = [...contents];
+      const newContent: IAddressTypes = {
+        id: id,
+        name: newName,
+        zonecode: zonecode,
+        address: address,
+      };
       //수정완료는 복사한 배열을 통해 재렌더링해서 구현할 예정입니다.
-
-    }
+      for (let i = 0; i < newContents.length; i++) {
+        if (newContents[i].id === id) {
+          newContents[i] = newContent;
+          break;
+        }
+      }
+      setContents(newContents);
+    };
 
     return (
       <>
         <Item>
-          {editMode ? (<><input placeholder="이름" value={newName} onChange={(e) => setNewName(e.target.value)}/></>) :
-            (<>
-              <Text>{name}</Text><Address>
-              <Text>{zonecode}<br/>{address}</Text>
-            </Address>
-            </>)}
-
+          {editMode ? (
+            <>
+              <input
+                placeholder="이름"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+              />
+            </>
+          ) : (
+            <>
+              <Text>{name}</Text>
+              <Address>
+                <Text>
+                  {zonecode}
+                  <br />
+                  {address}
+                </Text>
+              </Address>
+            </>
+          )}
         </Item>
         <Img>
-          {editMode ? (<Edit
-            src="/Check.svg"
-            onClick={completeContent}
-          />) : (<Edit
-            src="/Edit.svg"
-            onClick={editContent}
-          />)}
-          <Delete
-            src="/Delete.svg"
-            onClick={() => deleteContent(id)}
-          />
+          {editMode ? (
+            <Edit src="/Check.svg" onClick={completeContent} />
+          ) : (
+            <Edit src="/Edit.svg" onClick={editContent} />
+          )}
+          <Delete src="/Delete.svg" onClick={() => deleteContent(id)} />
         </Img>
       </>
     );
   };
-
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -119,7 +128,7 @@ export default function List({}) {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {contents.map(({id, name, zonecode, address}, index) => {
+              {contents.map(({ id, name, zonecode, address }, index) => {
                 return (
                   <Draggable key={id} draggableId={zonecode} index={index}>
                     {(provided) => (
@@ -128,13 +137,13 @@ export default function List({}) {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <ListItem key={index}
-                                  id={id}
-                                  name={name}
-                                  address={address}
-                                  zonecode={zonecode}
+                        <ListItem
+                          key={index}
+                          id={id}
+                          name={name}
+                          address={address}
+                          zonecode={zonecode}
                         ></ListItem>
-
                       </ListWrapper>
                     )}
                   </Draggable>
@@ -167,7 +176,7 @@ const ListWrapper = styled.div`
   //:hover {
   //  img {
   //    display: block;
-  //    
+  //
   //  }
   //}
 `;
@@ -202,12 +211,13 @@ const Delete = styled.img`
 const Img = styled.div`
   display: flex;
   width: 55px;
-  justify-content: space-between;`
-const Address = styled.div`
-`
+  justify-content: space-between;
+`;
+const Address = styled.div``;
 const Text = styled.span`
   color: #72757e;
   font-weight: 400;
   font-size: 14px;
   overflow: visible;
-  height: auto;`
+  height: auto;
+`;
